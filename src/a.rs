@@ -107,10 +107,9 @@ use std::collections::{BinaryHeap, HashMap};
 
 #[allow(dead_code)]
 type Graph = Vec<Vec<usize>>;
+#[allow(dead_code)]
+const M: usize = 1e9 as usize + 9;
 
 fn main() {
-    input! {
-
-    }
+    input! {}
 }
-
