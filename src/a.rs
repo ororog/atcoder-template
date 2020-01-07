@@ -1,3 +1,13 @@
+#[allow(dead_code)]
+fn is_whitespace(c: &char) -> bool {
+    c.is_whitespace()
+}
+
+#[allow(dead_code)]
+fn is_eol(c: &char) -> bool {
+    ['\r', '\n'].contains(c)
+}
+
 #[allow(unused_macros)]
 macro_rules! input {
     ($var:ident, $($r:tt)*) => {
@@ -7,12 +17,13 @@ macro_rules! input {
     ($($r:tt)*) => {
         let stdin = std::io::stdin();
         let mut bytes = std::io::Read::bytes(std::io::BufReader::new(stdin.lock()));
-        let mut next = move || -> String{
+        #[allow(unused_mut, unused_variables, bare_trait_objects)]
+        let mut next = move |f: &Fn(&char)->bool| -> String{
             bytes
                 .by_ref()
                 .map(|r|r.unwrap() as char)
-                .skip_while(|c|c.is_whitespace())
-                .take_while(|c|!c.is_whitespace())
+                .skip_while(|c|f(&c))
+                .take_while(|c|!f(&c))
                 .collect()
         };
         input_inner!{next, $($r)*};
@@ -41,6 +52,10 @@ macro_rules! read_value {
         ( $(read_value!($next, $t)),* )
     };
 
+    ($next:expr, [ $t:tt ; eol ]) => {
+        $next(&is_eol).split(' ').map(|x| x.parse::<$t>().unwrap()).collect::<Vec<_>>()
+    };
+
     ($next:expr, [ $t:tt ; $len:expr ]) => {
         (0..$len).map(|_| read_value!($next, $t)).collect::<Vec<_>>()
     };
@@ -62,7 +77,7 @@ macro_rules! read_value {
     };
 
     ($next:expr, $t:ty) => {
-        $next().parse::<$t>().expect("Parse error")
+        $next(&is_whitespace).parse::<$t>().expect("Parse error")
     };
 }
 
