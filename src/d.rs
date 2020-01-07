@@ -1,25 +1,9 @@
 #[allow(unused_macros)]
-macro_rules! input_byline {
-    ($($r:tt)* ) => {
-        let stdin = std::io::stdin();
-        let mut q = std::collections::VecDeque::new();
-        let mut next = || {
-            if q.is_empty() {
-                let mut s = String::new();
-                stdin.read_line(&mut s);
-                for v in s.split_whitespace() {
-                    q.push_back(v.to_string());
-                }
-            }
-            q.pop_front().unwrap()
-        };
-        input_inner!{next, $($r)*}
+macro_rules! input {
+    ($var:ident, $($r:tt)*) => {
+        input_inner!{$var, $($r)*}
     };
 
-}
-
-#[allow(unused_macros)]
-macro_rules! input {
     ($($r:tt)*) => {
         let stdin = std::io::stdin();
         let mut bytes = std::io::Read::bytes(std::io::BufReader::new(stdin.lock()));
@@ -31,7 +15,7 @@ macro_rules! input {
                 .take_while(|c|!c.is_whitespace())
                 .collect()
         };
-        input_inner!{next, $($r)*}
+        input_inner!{next, $($r)*};
     };
 }
 
@@ -73,31 +57,13 @@ macro_rules! read_value {
         read_value!($next, usize) - 1
     };
 
+    ($next:expr, parser) => {
+        $next
+    };
+
     ($next:expr, $t:ty) => {
         $next().parse::<$t>().expect("Parse error")
     };
-}
-
-trait Printable {
-    fn p(&self);
-}
-
-impl<T: std::fmt::Display> Printable for T {
-    fn p(&self) {
-        println!("{}", self);
-    }
-}
-
-impl<T: std::fmt::Display> Printable for [T] {
-    fn p(&self) {
-        for i in 0..self.len() {
-            if i != 0 {
-                print!(" ");
-            }
-            print!("{}", self[i]);
-        }
-        println!("");
-    }
 }
 
 #[allow(unused_imports)]
