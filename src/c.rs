@@ -84,12 +84,18 @@ macro_rules! read_value {
 #[allow(unused_imports)]
 use std::cmp::{max, min};
 #[allow(unused_imports)]
-use std::collections::{BinaryHeap, HashMap};
+use std::collections::{BinaryHeap, HashMap, HashSet};
+
+#[allow(dead_code)]
+struct Edge {
+    from: usize,
+    to: usize,
+}
 
 #[allow(dead_code)]
 type Graph = Vec<Vec<usize>>;
 #[allow(dead_code)]
-const M: usize = 1e9 as usize + 9;
+const M: usize = 1_000_000_007;
 
 fn main() {
     input! {}
